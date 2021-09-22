@@ -1,0 +1,18 @@
+<h3 class="title" *ngIf="clientes.length > 0">Lista de clientes</h3>
+
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let cliente of clientes">
+    <mat-expansion-panel-header class="list-title">{{ cliente.nome }}</mat-expansion-panel-header>
+    <p><strong>E-mail:</strong> {{ cliente.email }}</p>
+    <p><strong>Telefone:</strong> {{ cliente.telefone }}</p>
+    <p><strong>id:</strong> {{ cliente.id }}</p>
+    <mat-action-row>
+      <button mat-button color="primary">Editar</button>
+      <button mat-button color="warn">Excluir</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<p class="mat-body-1 zero-array" *ngIf="clientes.length <= 0">
+  Nenhum cliente cadastrado
+</p>

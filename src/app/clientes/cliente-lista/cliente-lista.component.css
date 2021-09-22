@@ -1,0 +1,19 @@
+:host {
+  margin-top: 2rem;
+  display: block;
+}
+
+.title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.list-title {
+  font-weight: 500;
+}
+
+.zero-array {
+  text-align: center;
+  font-size: 20px;
+}

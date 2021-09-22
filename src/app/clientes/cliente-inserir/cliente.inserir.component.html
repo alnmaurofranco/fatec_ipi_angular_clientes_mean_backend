@@ -1,0 +1,34 @@
+<mat-card>
+  <form (submit)="onAdicionarCliente(clienteForm)" #clienteForm="ngForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Nome</mat-label>
+      <input matInput type="text" ngModel name="nome" minlength="3" placeholder="Digite seu nome..." required />
+      <button *ngIf="true" matSuffix mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-error>Nome deve ter mais de 3 caracteres</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>E-mail</mat-label>
+      <input matInput type="email" placeholder="Digite seu e-mail..." ngModel name="email" required>
+      <button *ngIf="true" matSuffix mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-error>E-mail inválido!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Telefone</mat-label>
+      <input matInput type="text" name="telefone" ngModel placeholder="Digite seu telefone..." required>
+      <button *ngIf="true" matSuffix mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-error>Telefone deve ter mais de 3 números</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Cadastrar</button>
+  </form>
+
+
+</mat-card>
