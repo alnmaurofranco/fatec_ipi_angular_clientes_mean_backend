@@ -1,59 +1,52 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+const Cliente = require("./src/models/cliente");
+
 const app = express();
 
-const clientes = [
-  {
-    id: 1,
-    nome: "John Doe",
-    email: "johndoe@domain.com",
-    telefone: "121212212112",
-  },
-  {
-    id: 2,
-    nome: "Fulano",
-    email: "fulano@domain.com",
-    telefone: "255252252525",
-  },
-];
+// Conexão ao banco de dados
+require("./src/database");
 
 app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => res.send("Welcome to Express API"));
 
-app.post("/api/clientes", (req, res) => {
+app.post("/api/clientes", async (req, res) => {
   const { nome, email, telefone } = req.body;
 
-  const cliente = {
-    id: Number(Math.floor(Math.random() * 100)),
+  const cliente = new Cliente({
     nome,
     email,
     telefone,
-  };
+  });
 
-  clientes.push(cliente);
+  await cliente.save();
 
   return res.status(201).json();
 });
 
-app.delete("/api/clientes/:id", (req, res) => {
+app.get("/api/clientes/:id", async (req, res) => {
   const { id } = req.params;
 
-  const clienteIndex = clientes.findIndex(
-    (findCliente) => findCliente.id === Number(id)
-  );
+  const cliente = await Cliente.findOne({ _id: id });
 
-  if (clienteIndex < 0)
-    return res.status(400).json({ error: "User does not exists." });
+  return res.json(cliente);
+});
 
-  clientes.splice(clienteIndex, 1);
+app.delete("/api/clientes/:id", async (req, res) => {
+  const { id } = req.params;
+
+  await Cliente.deleteOne({ _id: id });
 
   return res.status(204).json();
 });
 
-app.get("/api/clientes", (req, res) => {
+app.get("/api/clientes", async (req, res) => {
+  const clientes = await Cliente.find();
+
   return res.json({ clientes });
 });
 
