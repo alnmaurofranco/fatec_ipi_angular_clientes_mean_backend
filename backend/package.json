@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev:server": "nodemon server.js",
-    "prod": "node server.js"
+    "dev:server": "nodemon src/server.js",
+    "prod": "node src/server.js"
   },
   "license": "MIT",
   "dependencies": {

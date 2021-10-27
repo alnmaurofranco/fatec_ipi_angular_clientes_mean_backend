@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Cliente } from './cliente.inserir.interface';
-import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+
+import { Cliente } from './cliente.inserir.interface';
+
+import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 // Observable: (Subject): Sofre eventos
 // Observer: Deseja ficar sabendo dos eventos
 // Design Pattern: Obeserver
+
 interface IClientesListResponseAPI {
-  clientes: Cliente[];
+  clientes: any;
 }
 
 @Injectable({
@@ -22,8 +26,20 @@ class ClienteService {
   getClientes() {
     this.httpClient
       .get<IClientesListResponseAPI>('http://localhost:3333/api/clientes')
-      .subscribe((data) => {
-        this.clientes = data.clientes;
+      .pipe(
+        map((data) => {
+          return data.clientes.map((cliente) => {
+            return {
+              id: cliente._id,
+              nome: cliente.nome,
+              telefone: cliente.telefone,
+              email: cliente.email,
+            };
+          });
+        })
+      )
+      .subscribe((clientes) => {
+        this.clientes = clientes;
         this.listaClientesAtualizada.next([...this.clientes]);
       });
     // return [...this.clientes]; // return this.clientes;
@@ -39,8 +55,12 @@ class ClienteService {
     this.httpClient
       .post<any>('http://localhost:3333/api/clientes', cliente)
       .subscribe((data) => {
-        this.clientes.push(cliente);
-        // Faz o envio de um evento
+        this.clientes.push({
+          id: data.id,
+          ...cliente,
+        });
+
+        // Faz o envio de um evento com a lista atualizada
         this.listaClientesAtualizada.next([...this.clientes]);
       });
   }
@@ -57,12 +77,16 @@ class ClienteService {
     this.clientes[clienteIndex] = cliente;
   }
 
-  removerCliente(cliente: Cliente) {
-    const clienteIndex = this.clientes.findIndex(
-      (findCliente) => findCliente.email === cliente.email
-    );
+  removerCliente(id: string): void {
+    this.httpClient
+      .delete(`http://localhost:3333/api/clientes/${id}`)
+      .subscribe(() => {
+        this.clientes = this.clientes.filter(
+          (findCliente) => findCliente.id !== id
+        );
 
-    this.clientes.splice(clienteIndex, 1);
+        this.listaClientesAtualizada.next([...this.clientes]);
+      });
   }
 }
 
