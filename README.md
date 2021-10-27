@@ -6,12 +6,17 @@
   
 ## 🚀 Tecnologias
 
+### Frontend
 - Angular
 - TypeScript
 - Material Design
+
+### Backend
 - Node.js
 - JavaScript
 - Express.js
 - Nodemon
+- MongoDB
+- Mongoose
 
 ---
